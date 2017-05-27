@@ -53,6 +53,11 @@ namespace ManagedDismapi {
         // TODO: find the value of DISMAPI_E_DISMAPI_ALREADY_INITIALIZED
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismCloseSession(
+            uint session
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismDelete(
             IntPtr ptr
         );
@@ -62,6 +67,14 @@ namespace ManagedDismapi {
             LogLevel logLevel,
             string logPath,
             string scratchPath
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismOpenSession(
+            string imagePath,
+            string windowsDirectory,
+            string systemDrive,
+            out uint session
         );
 
         [DllImport(DismApi, PreserveSig = false)]
