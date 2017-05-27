@@ -40,7 +40,6 @@ namespace ManagedDismapi {
         }
 
         internal static void HandleHResult(COMException e) {
-            // TODO: looking at the header, there are errors returned that aren't mentioned in the docs, like DISMAPI_E_SHUTDOWN_IN_PROGRESS
             switch(e.HResult) {
                 //TODO: case NativeMethods.DISMAPI_E_DISMAPI_ALREADY_INITIALIZED (need to find the value of this, not defined in the header)
                 case NativeMethods.ERROR_ELEVATION_REQUIRED_HR:
