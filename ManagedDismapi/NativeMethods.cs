@@ -91,7 +91,9 @@ namespace ManagedDismapi {
         internal string Value;
 
         internal static DismString FromIntPtr(IntPtr ptr) {
-            return Marshal.PtrToStructure<DismString>(ptr);
+            var s = Marshal.PtrToStructure<DismString>(ptr);
+            NativeMethods.DismDelete(ptr);
+            return s;
         }
     }
 }
