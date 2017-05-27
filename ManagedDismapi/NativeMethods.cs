@@ -63,6 +63,11 @@ namespace ManagedDismapi {
         );
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismGetLastErrorMessage(
+            out IntPtr message
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismInitialize(
             LogLevel logLevel,
             string logPath,
@@ -84,5 +89,9 @@ namespace ManagedDismapi {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     internal sealed class DismString {
         internal string Value;
+
+        internal static DismString FromIntPtr(IntPtr ptr) {
+            return Marshal.PtrToStructure<DismString>(ptr);
+        }
     }
 }
