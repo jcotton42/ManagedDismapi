@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using System.Security;
+using System.Threading;
 
 namespace ManagedDismapi {
     /// <summary>
@@ -63,6 +65,114 @@ namespace ManagedDismapi {
             }
 
             return new WindowsImage(session);
+        }
+
+        ///<summary>
+        /// Mounts a WIM to the specified location.
+        /// </summary>
+        /// <inheritdoc cref="MountImage"/>
+        public static void MountWIM(string filePath, string mountPath, string imageName,
+            MountOptions options, object userData, CancellationToken cancellationToken,
+            IProgress<DismProgressInfo> progress) => MountImage(filePath, mountPath, 0, imageName, ImageIdentifier.Name,
+            options, userData, cancellationToken, progress);
+
+        /// <summary>
+        /// Mounts a WIM to the specified location.
+        /// </summary>
+        /// <inheritdoc cref="MountImage"/>
+        public static void MountWIM(string filePath, string mountPath, uint imageIndex,
+            MountOptions options, object userData, CancellationToken cancellationToken,
+            IProgress<DismProgressInfo> progress) => MountImage(filePath, mountPath, imageIndex, null,
+            ImageIdentifier.Index, options, userData, cancellationToken, progress);
+
+        /// <summary>
+        /// Mounts a VHD or VHDX to the specified location.
+        /// </summary>
+        /// <param name="mountPath">The path to mount the image to. The path must already exist and be an empty directory on an NTFS drive, or an unassigned drive letter (e.g. D:).</param>
+        /// <inheritdoc cref="MountImage"/>
+        public static void MountVHD(string filePath, string mountPath, MountOptions options,
+            object userData, CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) => MountImage(
+            filePath, mountPath, 1, null, ImageIdentifier.Index, options, userData, cancellationToken, progress);
+
+        /// <param name="filePath">The path to the file.</param>
+        /// <param name="mountPath">The path to mount the image to. The path must already exist and be an empty directory on an NTFS drive.</param>
+        /// <param name="imageIndex">The index of the image you want to mount.</param>
+        /// <param name="imageName">The name of the image you want to mount.</param>
+        /// <param name="options">The options to use for mounting. You must use at least <see cref="MountOptions.ReadWrite"/> or <see cref="MountOptions.ReadOnly"/>.</param>
+        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
+        /// <param name="cancellationToken">A token used for canceling the operation.</param>
+        /// <param name="progress">A callback called to update on the progress of the command.</param>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> or <paramref name="mountPath"/> do not exist or are malformed.</exception>
+        internal static void MountImage(string filePath, string mountPath, uint imageIndex, string imageName,
+            ImageIdentifier imageIdentifier, MountOptions options, object userData,
+            CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
+            PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
+
+            try {
+                NativeMethods.DismMountImage(
+                    filePath,
+                    mountPath,
+                    imageIndex,
+                    imageName,
+                    imageIdentifier,
+                    options,
+                    cancellationToken.WaitHandle.GetSafeWaitHandle(),
+                    dpc,
+                    ptr
+                );
+            } catch(Exception e) {
+                HandleHResult(e);
+            } finally {
+                if(ptr != IntPtr.Zero) {
+                    GCHandle.FromIntPtr(ptr).Free();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remounts a previously mounted Windows image at the specified path.
+        /// </summary>
+        /// <param name="mountPath">An absolute or relative path to the mount directory of the image.</param>
+        public static void RemountImage(string mountPath) {
+            try {
+                NativeMethods.DismRemountImage(mountPath);
+            } catch(Exception e) {
+                HandleHResult(e);
+            }
+        }
+
+        public static void UnmountImage(string mountPath, UnmountOptions options, object userData,
+            CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
+            PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
+
+            try {
+                NativeMethods.DismUnmountImage(
+                    mountPath,
+                    options,
+                    cancellationToken.WaitHandle.GetSafeWaitHandle(),
+                    dpc,
+                    ptr
+                );
+            } catch(Exception e) {
+                HandleHResult(e);
+            } finally {
+                if(ptr != IntPtr.Zero) {
+                    GCHandle.FromIntPtr(ptr).Free();
+                }
+            }
+        }
+
+        private static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
+            out IntPtr ptr, out DismProgressCallback dpc) {
+            ptr = IntPtr.Zero;
+            if(userData != null) {
+                userData = GCHandle.ToIntPtr(GCHandle.Alloc(userData));
+            }
+
+            dpc = null;
+            if(progress != null) {
+                dpc = (current, total, data) => progress.Report(new DismProgressInfo(current, total, data));
+            }
         }
 
         internal static void HandleHResult(Exception e) {

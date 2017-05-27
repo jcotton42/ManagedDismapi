@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 [module: DefaultCharSet(CharSet.Unicode)]
 
@@ -75,6 +76,19 @@ namespace ManagedDismapi {
         );
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismMountImage(
+            string filePath,
+            string mountPath,
+            uint imageIndex,
+            string imageName,
+            ImageIdentifier imageIdentifier,
+            MountOptions options,
+            SafeWaitHandle cancelEvent,
+            DismProgressCallback progress,
+            IntPtr userData
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismOpenSession(
             string imagePath,
             string windowsDirectory,
@@ -83,7 +97,21 @@ namespace ManagedDismapi {
         );
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismRemountImage(
+            string mountPath
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismShutdown();
+
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismUnmountImage(
+            string mountPath,
+            UnmountOptions options,
+            SafeWaitHandle cancelEvent,
+            DismProgressCallback progress,
+            IntPtr userData
+        );
     }
 
     internal delegate void DismProgressCallback(uint current, uint total, IntPtr userData);
