@@ -80,4 +80,9 @@ namespace ManagedDismapi {
         [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismShutdown();
     }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+    internal sealed class DismString {
+        internal string Value;
+    }
 }
