@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 [module: DefaultCharSet(CharSet.Unicode)]
 
@@ -50,6 +51,11 @@ namespace ManagedDismapi {
         #endregion
 
         // TODO: find the value of DISMAPI_E_DISMAPI_ALREADY_INITIALIZED
+
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismDelete(
+            IntPtr ptr
+        );
 
         [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismInitialize(
