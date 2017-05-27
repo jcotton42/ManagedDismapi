@@ -40,12 +40,15 @@ namespace ManagedDismapi {
         }
 
         internal static void HandleHResult(COMException e) {
+            NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
+            var message = DismString.FromIntPtr(ptr).Value;
+
             switch(e.HResult) {
                 //TODO: case NativeMethods.DISMAPI_E_DISMAPI_ALREADY_INITIALIZED (need to find the value of this, not defined in the header)
                 case NativeMethods.ERROR_ELEVATION_REQUIRED_HR:
-                    throw new SecurityException("The calling process does not have administrative privileges.", e);
+                    throw new SecurityException(message, e);
                 case NativeMethods.DISMAPI_E_OPEN_SESSION_HANDLES:
-                    throw new InvalidOperationException("Session handles are still open.", e);
+                    throw new InvalidOperationException(message, e);
                 default:
                     // rethrows the exception, preserving the original stack trace
                     ExceptionDispatchInfo.Capture(e).Throw();
