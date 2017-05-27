@@ -39,6 +39,33 @@ namespace ManagedDismapi {
             }
         }
 
+        /// <summary>Opens the running OS image for servicing.</summary>
+        /// <inheritdoc cref="OpenImage(string, string, string)"/>
+        public static WindowsImage OpenOSImage() => OpenImage(NativeMethods.DISM_ONLINE_IMAGE, null, null);
+
+        /// <inheritdoc cref="OpenImage(string, string, string)"/>
+        public static WindowsImage OpenImage(string imagePath) => OpenImage(imagePath, null, null);
+
+        /// <summary>
+        /// Opens an offline Windows image for servicing.
+        /// </summary>
+        /// <param name="imagePath">An absolute or relative path to the directory of an offline Windows image.</param>
+        /// <param name="windowsDirectory">The path to the Windows folder relative to <paramref name="imagePath"/>. Defaults to "Windows" if <c>null</c> is passed.</param>
+        /// <param name="systemDrive">The letter of the system drive that contains the boot manager. Defaults to the drive containing <paramref name="imagePath"/> if <c>null</c> is passed.</param>
+        /// <returns>A new <see cref="WindowsImage"/> corresponding to the offline image.</returns>
+        /// <exception cref="TODO">TODO</exception>
+        public static WindowsImage OpenImage(string imagePath, string windowsDirectory, string systemDrive) {
+            uint session = 0;
+
+            try {
+                NativeMethods.DismOpenSession(imagePath, windowsDirectory, systemDrive, out session);
+            } catch(Exception e) {
+                HandleHResult(e);
+            }
+
+            return new WindowsImage(session);
+        }
+
         internal static void HandleHResult(Exception e) {
             NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
             var message = DismString.FromIntPtr(ptr).Value;
