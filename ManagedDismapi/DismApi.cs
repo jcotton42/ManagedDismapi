@@ -21,7 +21,7 @@ namespace ManagedDismapi {
         public static void Initialize(LogLevel logLevel, string logPath, string scratchPath) {
             try {
                 NativeMethods.DismInitialize(logLevel, logPath, scratchPath);
-            } catch(COMException e) {
+            } catch(Exception e) {
                 HandleHResult(e);
             }
         }
@@ -34,12 +34,12 @@ namespace ManagedDismapi {
         public static void Shutdown() {
             try {
                 NativeMethods.DismShutdown();
-            } catch(COMException e) {
+            } catch(Exception e) {
                 HandleHResult(e);
             }
         }
 
-        internal static void HandleHResult(COMException e) {
+        internal static void HandleHResult(Exception e) {
             NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
             var message = DismString.FromIntPtr(ptr).Value;
 
