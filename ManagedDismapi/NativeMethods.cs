@@ -86,6 +86,8 @@ namespace ManagedDismapi {
         internal static extern void DismShutdown();
     }
 
+    internal delegate void DismProgressCallback(uint current, uint total, IntPtr userData);
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     internal sealed class DismString {
         internal string Value;

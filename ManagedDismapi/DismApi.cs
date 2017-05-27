@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
 using System.Security;
 
 namespace ManagedDismapi {
