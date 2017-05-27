@@ -12,6 +12,14 @@ namespace ManagedDismapi {
         public static void Initialize(LogLevel logLevel, string logPath, string scratchPath) {
             HandleHResult(NativeMethods.DismInitialize(logLevel, logPath, scratchPath));
         }
+
+        /// <summary>
+        /// Shuts down the DISM API for this process.
+        /// </summary>
+        /// <exception cref="TODO">TODO</exception>
+        public static void Shutdown() {
+            HandleHResult(NativeMethods.DismShutdown());
+        }
         
         internal static void HandleHResult(int hr) {
             switch(hr) {

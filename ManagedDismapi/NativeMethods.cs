@@ -58,5 +58,8 @@ namespace ManagedDismapi {
             string logPath,
             string scratchPath
         );
+
+        [DllImport(DismApi)]
+        internal static extern int DismShutdown();
     }
 }
