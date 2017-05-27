@@ -8,7 +8,6 @@ namespace ManagedDismapi {
 
         private const string DismApi = "DismApi";
 
-        internal const uint S_OK = 0x00000000;
         internal const int ERROR_ELEVATION_REQUIRED_HR = unchecked((int)0x800702E4);
         internal const int ERROR_SUCCESS_REBOOT_REQUIRED = 0x00000BC2;
 
@@ -52,14 +51,14 @@ namespace ManagedDismapi {
 
         // TODO: find the value of DISMAPI_E_DISMAPI_ALREADY_INITIALIZED
 
-        [DllImport(DismApi)]
-        internal static extern int DismInitialize(
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismInitialize(
             LogLevel logLevel,
             string logPath,
             string scratchPath
         );
 
-        [DllImport(DismApi)]
-        internal static extern int DismShutdown();
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismShutdown();
     }
 }
