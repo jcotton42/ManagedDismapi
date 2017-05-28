@@ -115,7 +115,7 @@ namespace ManagedDismapi {
         /// <param name="options">The options to use for mounting. You must use at least <see cref="MountOptions.ReadWrite"/> or <see cref="MountOptions.ReadOnly"/>.</param>
         /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
         /// <param name="cancellationToken">A token used for canceling the operation.</param>
-        /// <param name="progress">A callback called to update on the progress of the command.</param>
+        /// <param name="progress">A callback called to update on the progress of the operation.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> or <paramref name="mountPath"/> do not exist or are malformed.</exception>
         public static void MountVHD(string filePath, string mountPath, MountOptions options,
             object userData, CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) => MountImage(
@@ -159,6 +159,14 @@ namespace ManagedDismapi {
             }
         }
 
+        /// <summary>
+        /// Unmounts a Windows image from a specified location.
+        /// </summary>
+        /// <param name="mountPath">The path to the mount point.</param>
+        /// <param name="options">The options to use when unmounting the image. You must use at least <see cref="UnmountOptions.Commit"/> or <seealso cref="UnmountOptions.Discard"/>.</param>
+        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
+        /// <param name="cancellationToken">A token used for canceling the operation.</param>
+        /// <param name="progress">A callback called to update on the progress of the operation.</param>
         public static void UnmountImage(string mountPath, UnmountOptions options, object userData,
             CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
             PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
