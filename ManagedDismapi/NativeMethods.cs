@@ -138,4 +138,18 @@ namespace ManagedDismapi {
             return Marshal.PtrToStructure<DismString>(ptr);
         }
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct SYSTEMTIME {
+        internal ushort Year;
+        internal ushort Month;
+        internal ushort DayOfWeek;
+        internal ushort Day;
+        internal ushort Hour;
+        internal ushort Minute;
+        internal ushort Second;
+        internal ushort Millisecond;
+
+        internal DateTime ToDateTime() => new DateTime(Year, Month, Day, Hour, Minute, Second, Millisecond);
+    }
 }
