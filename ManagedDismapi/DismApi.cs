@@ -199,7 +199,7 @@ namespace ManagedDismapi {
             }
         }
 
-        private static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
+        internal static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
             out IntPtr ptr, out DismProgressCallback dpc) {
             ptr = IntPtr.Zero;
             if(userData != null) {
