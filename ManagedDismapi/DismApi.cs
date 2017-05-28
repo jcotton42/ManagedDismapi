@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Threading;
 
 namespace ManagedDismapi {
@@ -23,7 +21,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismInitialize(logLevel, logPath, scratchPath);
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             }
         }
 
@@ -36,7 +34,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismShutdown();
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             }
         }
 
@@ -69,7 +67,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismOpenSession(imagePath, windowsDirectory, systemDrive, out session);
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             }
 
             return new WindowsImage(session);
@@ -124,7 +122,7 @@ namespace ManagedDismapi {
         internal static void MountImage(string filePath, string mountPath, uint imageIndex, string imageName,
             ImageIdentifier imageIdentifier, MountOptions options, object userData,
             CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
-            PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
+            Utils.PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
 
             try {
                 NativeMethods.DismMountImage(
@@ -139,7 +137,7 @@ namespace ManagedDismapi {
                     ptr
                 );
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             } finally {
                 if(ptr != IntPtr.Zero) {
                     GCHandle.FromIntPtr(ptr).Free();
@@ -155,7 +153,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismRemountImage(mountPath);
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             }
         }
 
@@ -169,7 +167,7 @@ namespace ManagedDismapi {
         /// <param name="progress">A callback called to update on the progress of the operation.</param>
         public static void UnmountImage(string mountPath, UnmountOptions options, object userData,
             CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
-            PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
+            Utils.PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
 
             try {
                 NativeMethods.DismUnmountImage(
@@ -180,7 +178,7 @@ namespace ManagedDismapi {
                     ptr
                 );
             } catch(Exception e) {
-                HandleHResult(e);
+                Utils.HandleHResult(e);
             } finally {
                 if(ptr != IntPtr.Zero) {
                     GCHandle.FromIntPtr(ptr).Free();
@@ -195,38 +193,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCleanupMountPoints();
             } catch(Exception e) {
-                HandleHResult(e);
-            }
-        }
-
-        internal static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
-            out IntPtr ptr, out DismProgressCallback dpc) {
-            ptr = IntPtr.Zero;
-            if(userData != null) {
-                userData = GCHandle.ToIntPtr(GCHandle.Alloc(userData));
-            }
-
-            dpc = null;
-            if(progress != null) {
-                dpc = (current, total, data) => progress.Report(new DismProgressInfo(current, total, data));
-            }
-        }
-
-        internal static void HandleHResult(Exception e) {
-            NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
-            var message = DismString.FromIntPtr(ptr).Value;
-            NativeMethods.DismDelete(ptr);
-
-            switch(e.HResult) {
-                //TODO: case NativeMethods.DISMAPI_E_DISMAPI_ALREADY_INITIALIZED (need to find the value of this, not defined in the header)
-                case NativeMethods.ERROR_ELEVATION_REQUIRED_HR:
-                    throw new SecurityException(message, e);
-                case NativeMethods.DISMAPI_E_OPEN_SESSION_HANDLES:
-                    throw new InvalidOperationException(message, e);
-                default:
-                    // rethrows the exception, preserving the original stack trace
-                    ExceptionDispatchInfo.Capture(e).Throw();
-                    break;
+                Utils.HandleHResult(e);
             }
         }
     }

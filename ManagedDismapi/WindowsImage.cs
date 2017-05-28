@@ -23,7 +23,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCloseSession(session);
             } catch(Exception e) {
-                DismApi.HandleHResult(e);
+                Utils.HandleHResult(e);
             }
 
             disposed = true;
@@ -41,7 +41,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCloseSession(session);
             } catch(Exception e) {
-                DismApi.HandleHResult(e);
+                Utils.HandleHResult(e);
             }
         }
     }
