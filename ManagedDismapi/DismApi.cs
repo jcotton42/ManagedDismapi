@@ -188,6 +188,17 @@ namespace ManagedDismapi {
             }
         }
 
+        /// <summary>
+        /// Removes files and resources associated with corrupted or invalid mount points.
+        /// </summary>
+        public static void CleanupMountPoints() {
+            try {
+                NativeMethods.DismCleanupMountPoints();
+            } catch(Exception e) {
+                HandleHResult(e);
+            }
+        }
+
         private static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
             out IntPtr ptr, out DismProgressCallback dpc) {
             ptr = IntPtr.Zero;

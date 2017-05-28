@@ -54,6 +54,9 @@ namespace ManagedDismapi {
         // TODO: find the value of DISMAPI_E_DISMAPI_ALREADY_INITIALIZED
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismCleanupMountPoints();
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismCloseSession(
             uint session
         );
