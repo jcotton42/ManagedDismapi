@@ -1,9 +1,49 @@
 ﻿using System;
 
 namespace ManagedDismapi {
+    /// <summary>
+    /// Indicates whether an image is a bootable type.
+    /// </summary>
+    public enum ImageBootable {
+        /// <summary>
+        /// The image is bootable.
+        /// </summary>
+        Yes = 0,
+
+        /// <summary>
+        /// The image is not bootable.
+        /// </summary>
+        No = 1,
+
+        /// <summary>
+        /// The image type is unknown.
+        /// </summary>
+        Unknown = 2
+    }
+
     internal enum ImageIdentifier {
         Index = 0,
         Name = 1
+    }
+
+    /// <summary>
+    /// The file type of a Windows image container.
+    /// </summary>
+    public enum ImageType {
+        /// <summary>
+        /// An unsupported file type.
+        /// </summary>
+        Unsupported = -1,
+
+        /// <summary>
+        /// A .wim file.
+        /// </summary>
+        WIM = 0,
+
+        /// <summary>
+        /// A .vhd or .vhdx file.
+        /// </summary>
+        VHD = 1
     }
 
     /// <summary>
@@ -34,6 +74,7 @@ namespace ManagedDismapi {
         /// The image was mounted readwrite.
         /// </summary>
         ReadWrite = 0,
+
         /// <summary>
         /// The image was mounted readonly.
         /// </summary>
@@ -74,10 +115,12 @@ namespace ManagedDismapi {
         /// The image is mounted and ready for servicing.
         /// </summary>
         OK = 0,
+
         /// <summary>
         /// The image must be remounted before being serviced.
         /// </summary>
         NeedsRemount = 1,
+
         /// <summary>
         /// The image is corrupt and in an invalid state.
         /// </summary>
