@@ -27,6 +27,20 @@ namespace ManagedDismapi {
     }
 
     /// <summary>
+    /// The way an image was mounted.
+    /// </summary>
+    public enum MountMode {
+        /// <summary>
+        /// The image was mounted readwrite.
+        /// </summary>
+        ReadWrite = 0,
+        /// <summary>
+        /// The image was mounted readonly.
+        /// </summary>
+        ReadOnly = 1
+    }
+
+    /// <summary>
     /// Options to use when mounting a Windows image.
     /// </summary>
     [Flags]
@@ -50,6 +64,24 @@ namespace ManagedDismapi {
         /// Stop mounting if the image is determined to be corrupt. Does not apply when mounting VHDs.
         /// </summary>
         CheckIntegrity = NativeMethods.DISM_MOUNT_CHECK_INTEGRITY
+    }
+
+    /// <summary>
+    /// The mount status of an image.
+    /// </summary>
+    public enum MountStatus {
+        /// <summary>
+        /// The image is mounted and ready for servicing.
+        /// </summary>
+        OK = 0,
+        /// <summary>
+        /// The image must be remounted before being serviced.
+        /// </summary>
+        NeedsRemount = 1,
+        /// <summary>
+        /// The image is corrupt and in an invalid state.
+        /// </summary>
+        Invalid = 2
     }
 
     /// <summary>

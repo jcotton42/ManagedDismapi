@@ -77,6 +77,12 @@ namespace ManagedDismapi {
         );
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismGetMountedImageInfo(
+            out IntPtr mountedImageInfo,
+            out uint count
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismInitialize(
             LogLevel logLevel,
             string logPath,

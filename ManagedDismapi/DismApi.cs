@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Threading;
 
 namespace ManagedDismapi {
@@ -195,6 +196,22 @@ namespace ManagedDismapi {
             } catch(Exception e) {
                 Utils.HandleHResult(e);
             }
+        }
+
+        /// <summary>
+        /// Gets information about currently mounted images.
+        /// </summary>
+        /// <returns>An array of <see cref="MountedImageInfo"/> describing mounted images..</returns>
+        public static MountedImageInfo[] GetMountedImageInfo() {
+            MountedImageInfo[] mii = null;
+            try {
+                NativeMethods.DismGetMountedImageInfo(out IntPtr mountedImageInfo, out uint count);
+                mii = Utils.MarshalArray(mountedImageInfo, count, MountedImageInfo.FromIntPtr);
+                NativeMethods.DismDelete(mountedImageInfo);
+            } catch(Exception e) {
+                Utils.HandleHResult(e);
+            }
+            return mii;
         }
     }
 }
