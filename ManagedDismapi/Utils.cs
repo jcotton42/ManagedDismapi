@@ -23,6 +23,16 @@ namespace ManagedDismapi {
             }
         }
 
+        internal static T[] MarshalArray<T>(IntPtr ptr, uint count, Func<IntPtr, T> marshaller) {
+            var size = Marshal.SizeOf<T>();
+            var array = new T[count];
+            for(uint i = 0; i < count; i++) {
+                array[i] = marshaller(ptr);
+                ptr += size;
+            }
+            return array;
+        }
+
         internal static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
             out IntPtr ptr, out DismProgressCallback dpc) {
             ptr = IntPtr.Zero;
