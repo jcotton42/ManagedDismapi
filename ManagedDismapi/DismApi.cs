@@ -215,6 +215,7 @@ namespace ManagedDismapi {
         internal static void HandleHResult(Exception e) {
             NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
             var message = DismString.FromIntPtr(ptr).Value;
+            NativeMethods.DismDelete(ptr);
 
             switch(e.HResult) {
                 //TODO: case NativeMethods.DISMAPI_E_DISMAPI_ALREADY_INITIALIZED (need to find the value of this, not defined in the header)
