@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 namespace ManagedDismapi {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
     public sealed class MountedImageInfo {
+        internal MountedImageInfo() { }
         public string MountPath { get; }
         public string ImageFilePath { get; }
         public uint ImageIndex { get; }
