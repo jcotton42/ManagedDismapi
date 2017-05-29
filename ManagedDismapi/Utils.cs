@@ -2,6 +2,7 @@ using System;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     internal static class Utils {

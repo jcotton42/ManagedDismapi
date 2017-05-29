@@ -1,4 +1,5 @@
 ﻿using System;
+using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     /// <summary>

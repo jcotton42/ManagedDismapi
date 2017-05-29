@@ -9,7 +9,7 @@ using Microsoft.Win32.SafeHandles;
 
 [module: DefaultCharSet(CharSet.Unicode)]
 
-namespace ManagedDismapi {
+namespace ManagedDismapi.Interop {
     internal static class NativeMethods {
         #region Constants
 
