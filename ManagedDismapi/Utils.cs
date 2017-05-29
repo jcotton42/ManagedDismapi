@@ -25,8 +25,12 @@ namespace ManagedDismapi {
         }
 
         internal static T[] MarshalArray<T>(IntPtr ptr, uint count, Func<IntPtr, T> marshaller) {
-            var size = Marshal.SizeOf<T>();
-            var array = new T[count];
+            return MarshalArray<T, T>(ptr, count, marshaller);
+        }
+
+        internal static TManaged[] MarshalArray<TUnmanaged, TManaged>(IntPtr ptr, uint count, Func<IntPtr, TManaged> marshaller) {
+            var size = Marshal.SizeOf<TUnmanaged>();
+            var array = new TManaged[count];
             for(uint i = 0; i < count; i++) {
                 array[i] = marshaller(ptr);
                 ptr += size;
