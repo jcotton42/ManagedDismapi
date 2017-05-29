@@ -2,6 +2,36 @@
 
 namespace ManagedDismapi {
     /// <summary>
+    /// The architecture of a Windows image.
+    /// </summary>
+    public enum ImageArchitecture : uint {
+        /// <summary>
+        /// x86 architecture.
+        /// </summary>
+        X86 = 0,
+
+        /// <summary>
+        /// ARM architecture.
+        /// </summary>
+        ARM = 5,
+
+        /// <summary>
+        /// Itanium architecture.
+        /// </summary>
+        IA64 = 6,
+
+        /// <summary>
+        /// x64 architecture.
+        /// </summary>
+        X64 = 9,
+
+        /// <summary>
+        /// The image does not have an architecture.
+        /// </summary>
+        Neutral = 11
+    }
+
+    /// <summary>
     /// Indicates whether an image is a bootable type.
     /// </summary>
     public enum ImageBootable {
