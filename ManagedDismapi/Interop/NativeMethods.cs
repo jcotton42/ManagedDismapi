@@ -72,6 +72,13 @@ namespace ManagedDismapi.Interop {
         );
 
         [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismGetImageInfo(
+            string imageFilePath,
+            out IntPtr imageInfo,
+            out uint count
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismGetLastErrorMessage(
             out IntPtr message
         );

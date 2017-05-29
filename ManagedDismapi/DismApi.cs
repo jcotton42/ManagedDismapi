@@ -214,5 +214,26 @@ namespace ManagedDismapi {
             }
             return mii;
         }
+
+        /// <summary>
+        /// Gets information about the images inside a WIM or VHD file.
+        /// </summary>
+        /// <param name="imagePath">The path to the image.</param>
+        /// <returns>An array of <see cref="ImageInfo"/> instances.</returns>
+        public static ImageInfo[] GetImageInfo(string imagePath) {
+            ImageInfo[] ii = null;
+            var imageInfo = IntPtr.Zero;
+
+            try {
+                NativeMethods.DismGetImageInfo(imagePath, out imageInfo, out uint count);
+                ii = Utils.MarshalArray<DismImageInfo, ImageInfo>(imageInfo, count, ImageInfo.FromIntPtr);
+            } catch(Exception e) {
+                Utils.HandleHResult(e);
+            } finally {
+                NativeMethods.DismDelete(imageInfo);
+            }
+
+            return ii;
+        }
     }
 }
