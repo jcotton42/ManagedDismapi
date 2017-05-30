@@ -6,7 +6,8 @@ using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     /// <summary>
-    /// TODO
+    /// Contains functions for initializing the DISM API, mounting images, opening images for servicing, and retrieving image information.
+    /// <para>You must use <see cref="Initialize"/> before calling any methods in this library. You must also call <see cref="Shutdown"/> before your program exits.</para>
     /// </summary>
     public static class DismApi {
         /// <summary>
