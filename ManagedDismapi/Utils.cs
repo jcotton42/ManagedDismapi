@@ -6,7 +6,7 @@ using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     internal static class Utils {
-        internal static void HandleHResult(Exception e) {
+        internal static void HandleException(Exception e) {
             NativeMethods.DismGetLastErrorMessage(out IntPtr ptr);
             var message = DismString.FromIntPtr(ptr).Value;
             NativeMethods.DismDelete(ptr);

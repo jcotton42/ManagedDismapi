@@ -23,7 +23,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismInitialize(logLevel, logPath, scratchPath);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -36,7 +36,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismShutdown();
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -69,7 +69,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismOpenSession(imagePath, windowsDirectory, systemDrive, out session);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
 
             return new WindowsImage(session);
@@ -134,7 +134,7 @@ namespace ManagedDismapi {
                     IntPtr.Zero
                 );
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -146,7 +146,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismRemountImage(mountPath);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -168,7 +168,7 @@ namespace ManagedDismapi {
                     IntPtr.Zero
                 );
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -179,7 +179,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCleanupMountPoints();
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -194,7 +194,7 @@ namespace ManagedDismapi {
                 mii = Utils.MarshalArray(mountedImageInfo, count, MountedImageInfo.FromIntPtr);
                 NativeMethods.DismDelete(mountedImageInfo);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
             return mii;
         }
@@ -212,7 +212,7 @@ namespace ManagedDismapi {
                 NativeMethods.DismGetImageInfo(imagePath, out imageInfo, out uint count);
                 ii = Utils.MarshalArray<DismImageInfo, ImageInfo>(imageInfo, count, ImageInfo.FromIntPtr);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             } finally {
                 NativeMethods.DismDelete(imageInfo);
             }

@@ -32,7 +32,7 @@ namespace ManagedDismapi {
                     IntPtr.Zero
                 );
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
 
@@ -47,7 +47,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCloseSession(session);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
 
             disposed = true;
@@ -65,7 +65,7 @@ namespace ManagedDismapi {
             try {
                 NativeMethods.DismCloseSession(session);
             } catch(Exception e) {
-                Utils.HandleHResult(e);
+                Utils.HandleException(e);
             }
         }
     }
