@@ -52,8 +52,6 @@ namespace ManagedDismapi.Interop {
         internal const uint DISM_COMMIT_GENERATE_INTEGRITY = 0x00010000;
         internal const uint DISM_COMMIT_APPEND = 0x00020000;
 
-        internal const uint DISM_COMMIT_MASK = unchecked((int)0xffff0000);
-
         #endregion
 
         // TODO: find the value of DISMAPI_E_DISMAPI_ALREADY_INITIALIZED
@@ -64,6 +62,15 @@ namespace ManagedDismapi.Interop {
         [DllImport(DismApi, PreserveSig = false)]
         internal static extern void DismCloseSession(
             uint session
+        );
+
+        [DllImport(DismApi, PreserveSig = false)]
+        internal static extern void DismCommitImage(
+            uint session,
+            CommitOptions flags,
+            SafeWaitHandle cancelEvent,
+            DismProgressCallback progress,
+            IntPtr userData
         );
 
         [DllImport(DismApi, PreserveSig = false)]

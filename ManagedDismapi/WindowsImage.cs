@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading;
 using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     /// <summary>
-    /// Represents a open Windows image.
+    /// Represents an open Windows image.
     /// </summary>
     public sealed class WindowsImage : IDisposable {
         private readonly uint session;
@@ -11,6 +12,28 @@ namespace ManagedDismapi {
 
         internal WindowsImage(uint session) {
             this.session = session;
+        }
+
+        /// <summary>
+        /// Commits changes made to the Windows image without closing it/
+        /// </summary>
+        /// <param name="options">Options to for committing the image.</param>
+        /// <param name="cancellationToken">A token used for canceling the operation.</param>
+        /// <param name="progress">A callback called to update on the progress of the command.</param>
+        public void Commit(CommitOptions options, CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
+            EnsureNotDisposed();
+
+            try {
+                NativeMethods.DismCommitImage(
+                    session,
+                    options,
+                    cancellationToken.WaitHandle.GetSafeWaitHandle(),
+                    Utils.MakeNativeCallback(progress),
+                    IntPtr.Zero
+                );
+            } catch(Exception e) {
+                Utils.HandleHResult(e);
+            }
         }
 
         /// <summary>

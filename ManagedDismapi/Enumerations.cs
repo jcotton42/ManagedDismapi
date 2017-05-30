@@ -3,6 +3,27 @@ using ManagedDismapi.Interop;
 
 namespace ManagedDismapi {
     /// <summary>
+    /// Options to use when committing a Windows image.
+    /// </summary>
+    public enum CommitOptions : uint {
+        /// <summary>
+        /// No options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Saves integrity information into the image. Does not apply to VHDs.
+        /// </summary>
+        //TODO: is the last part true?
+        GenerateIntegrity = NativeMethods.DISM_COMMIT_GENERATE_INTEGRITY,
+
+        /// <summary>
+        /// Append the changes into a new image in the WIM. Does not apply to VHDs.
+        /// </summary>
+        Append = NativeMethods.DISM_COMMIT_APPEND
+    }
+
+    /// <summary>
     /// The architecture of a Windows image.
     /// </summary>
     public enum ImageArchitecture : uint {
@@ -174,9 +195,9 @@ namespace ManagedDismapi {
         Discard = NativeMethods.DISM_DISCARD_IMAGE,
 
         /// <summary>
-        /// Saves integrity information into the image. Must be used with <see cref="Commit"/>. Does not apply to VHDs.
+        /// Saves integrity information into the image. Does not apply to VHDs.
         /// </summary>
-        //TODO: are the last two parts true?
+        //TODO: is the last part true?
         GenerateIntegrity = NativeMethods.DISM_COMMIT_GENERATE_INTEGRITY,
 
         /// <summary>
