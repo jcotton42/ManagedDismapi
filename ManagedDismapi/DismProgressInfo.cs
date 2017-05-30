@@ -1,18 +1,11 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace ManagedDismapi {
+﻿namespace ManagedDismapi {
     /// <summary>
     /// The progress information passed during a DISM operation.
     /// </summary>
     public sealed class DismProgressInfo {
-        internal DismProgressInfo(uint current, uint total, IntPtr userData) {
+        internal DismProgressInfo(uint current, uint total) {
             Current = current;
             Total = total;
-
-            if(userData != IntPtr.Zero) {
-                UserData = GCHandle.FromIntPtr(userData).Target;
-            }
         }
 
         /// <summary>
@@ -24,10 +17,5 @@ namespace ManagedDismapi {
         /// The total progress value.
         /// </summary>
         public uint Total { get; }
-
-        /// <summary>
-        /// User-defined custom data.
-        /// </summary>
-        public object UserData { get; }
     }
 }

@@ -82,14 +82,13 @@ namespace ManagedDismapi {
         /// <param name="mountPath">The path to mount the image to. The path must already exist and be an empty directory on an NTFS drive.</param>
         /// <param name="imageName">The name of the image you want to mount.</param>
         /// <param name="options">The options to use for mounting. You must use at least <see cref="MountOptions.ReadWrite"/> or <see cref="MountOptions.ReadOnly"/>.</param>
-        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
         /// <param name="cancellationToken">A token used for canceling the operation.</param>
         /// <param name="progress">A callback called to update on the progress of the command.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> or <paramref name="mountPath"/> do not exist or are malformed.</exception>
         public static void MountWIM(string filePath, string mountPath, string imageName,
-            MountOptions options, object userData, CancellationToken cancellationToken,
+            MountOptions options, CancellationToken cancellationToken,
             IProgress<DismProgressInfo> progress) => MountImage(filePath, mountPath, 0, imageName, ImageIdentifier.Name,
-            options, userData, cancellationToken, progress);
+            options, cancellationToken, progress);
 
         /// <summary>
         /// Mounts a WIM to the specified location.
@@ -98,14 +97,13 @@ namespace ManagedDismapi {
         /// <param name="mountPath">The path to mount the image to. The path must already exist and be an empty directory on an NTFS drive.</param>
         /// <param name="imageIndex">The index of the image you want to mount.</param>
         /// <param name="options">The options to use for mounting. You must use at least <see cref="MountOptions.ReadWrite"/> or <see cref="MountOptions.ReadOnly"/>.</param>
-        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
         /// <param name="cancellationToken">A token used for canceling the operation.</param>
         /// <param name="progress">A callback called to update on the progress of the command.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> or <paramref name="mountPath"/> do not exist or are malformed.</exception>
         public static void MountWIM(string filePath, string mountPath, uint imageIndex,
-            MountOptions options, object userData, CancellationToken cancellationToken,
+            MountOptions options, CancellationToken cancellationToken,
             IProgress<DismProgressInfo> progress) => MountImage(filePath, mountPath, imageIndex, null,
-            ImageIdentifier.Index, options, userData, cancellationToken, progress);
+            ImageIdentifier.Index, options, cancellationToken, progress);
 
         /// <summary>
         /// Mounts a VHD or VHDX to the specified location.
@@ -113,19 +111,16 @@ namespace ManagedDismapi {
         /// <param name="mountPath">The path to mount the image to. The path must already exist and be an empty directory on an NTFS drive, or an unassigned drive letter (e.g. D:).</param>
         /// <param name="filePath">The path to the file.</param>
         /// <param name="options">The options to use for mounting. You must use at least <see cref="MountOptions.ReadWrite"/> or <see cref="MountOptions.ReadOnly"/>.</param>
-        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
         /// <param name="cancellationToken">A token used for canceling the operation.</param>
         /// <param name="progress">A callback called to update on the progress of the operation.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> or <paramref name="mountPath"/> do not exist or are malformed.</exception>
         public static void MountVHD(string filePath, string mountPath, MountOptions options,
-            object userData, CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) => MountImage(
-            filePath, mountPath, 1, null, ImageIdentifier.Index, options, userData, cancellationToken, progress);
+            CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) => MountImage(
+            filePath, mountPath, 1, null, ImageIdentifier.Index, options, cancellationToken, progress);
 
         internal static void MountImage(string filePath, string mountPath, uint imageIndex, string imageName,
-            ImageIdentifier imageIdentifier, MountOptions options, object userData,
-            CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
-            Utils.PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
-
+            ImageIdentifier imageIdentifier, MountOptions options, CancellationToken cancellationToken,
+            IProgress<DismProgressInfo> progress) {
             try {
                 NativeMethods.DismMountImage(
                     filePath,
@@ -135,15 +130,11 @@ namespace ManagedDismapi {
                     imageIdentifier,
                     options,
                     cancellationToken.WaitHandle.GetSafeWaitHandle(),
-                    dpc,
-                    ptr
+                    Utils.MakeNativeCallback(progress),
+                    IntPtr.Zero
                 );
             } catch(Exception e) {
                 Utils.HandleHResult(e);
-            } finally {
-                if(ptr != IntPtr.Zero) {
-                    GCHandle.FromIntPtr(ptr).Free();
-                }
             }
         }
 
@@ -164,27 +155,20 @@ namespace ManagedDismapi {
         /// </summary>
         /// <param name="mountPath">The path to the mount point.</param>
         /// <param name="options">The options to use when unmounting the image. You must use at least <see cref="UnmountOptions.Commit"/> or <seealso cref="UnmountOptions.Discard"/>.</param>
-        /// <param name="userData">The object passed to <paramref name="progress"/> callback.</param>
         /// <param name="cancellationToken">A token used for canceling the operation.</param>
         /// <param name="progress">A callback called to update on the progress of the operation.</param>
-        public static void UnmountImage(string mountPath, UnmountOptions options, object userData,
+        public static void UnmountImage(string mountPath, UnmountOptions options,
             CancellationToken cancellationToken, IProgress<DismProgressInfo> progress) {
-            Utils.PrepareCallbackAndUserData(userData, progress, out IntPtr ptr, out DismProgressCallback dpc);
-
             try {
                 NativeMethods.DismUnmountImage(
                     mountPath,
                     options,
                     cancellationToken.WaitHandle.GetSafeWaitHandle(),
-                    dpc,
-                    ptr
+                    Utils.MakeNativeCallback(progress),
+                    IntPtr.Zero
                 );
             } catch(Exception e) {
                 Utils.HandleHResult(e);
-            } finally {
-                if(ptr != IntPtr.Zero) {
-                    GCHandle.FromIntPtr(ptr).Free();
-                }
             }
         }
 

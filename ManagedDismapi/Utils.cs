@@ -38,17 +38,11 @@ namespace ManagedDismapi {
             return array;
         }
 
-        internal static void PrepareCallbackAndUserData(object userData, IProgress<DismProgressInfo> progress,
-            out IntPtr ptr, out DismProgressCallback dpc) {
-            ptr = IntPtr.Zero;
-            if(userData != null) {
-                userData = GCHandle.ToIntPtr(GCHandle.Alloc(userData));
-            }
-
-            dpc = null;
+        internal static DismProgressCallback MakeNativeCallback(IProgress<DismProgressInfo> progress) {
             if(progress != null) {
-                dpc = (current, total, data) => progress.Report(new DismProgressInfo(current, total, data));
+                return (current, total, _) => progress.Report(new DismProgressInfo(current, total));
             }
+            return null;
         }
     }
 }
