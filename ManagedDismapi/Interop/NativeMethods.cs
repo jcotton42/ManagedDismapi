@@ -39,20 +39,20 @@ namespace ManagedDismapi.Interop {
         internal const int DISMAPI_E_BUSY = unchecked((int)0x800f0902);
 
         internal const string DISM_ONLINE_IMAGE = "DISM_{53BFAE52-B167-4E2F-A258-0A37B57FF845}";
-        internal const int DISM_SESSION_DEFAULT = 0;
+        internal const uint DISM_SESSION_DEFAULT = 0;
 
-        internal const int DISM_MOUNT_READWRITE = 0x00000000;
-        internal const int DISM_MOUNT_READONLY = 0x00000001;
-        internal const int DISM_MOUNT_OPTIMIZE = 0x00000002;
-        internal const int DISM_MOUNT_CHECK_INTEGRITY = 0x00000004;
+        internal const uint DISM_MOUNT_READWRITE = 0x00000000;
+        internal const uint DISM_MOUNT_READONLY = 0x00000001;
+        internal const uint DISM_MOUNT_OPTIMIZE = 0x00000002;
+        internal const uint DISM_MOUNT_CHECK_INTEGRITY = 0x00000004;
 
-        internal const int DISM_COMMIT_IMAGE = 0x00000000;
-        internal const int DISM_DISCARD_IMAGE = 0x00000001;
+        internal const uint DISM_COMMIT_IMAGE = 0x00000000;
+        internal const uint DISM_DISCARD_IMAGE = 0x00000001;
 
-        internal const int DISM_COMMIT_GENERATE_INTEGRITY = 0x00010000;
-        internal const int DISM_COMMIT_APPEND = 0x00020000;
+        internal const uint DISM_COMMIT_GENERATE_INTEGRITY = 0x00010000;
+        internal const uint DISM_COMMIT_APPEND = 0x00020000;
 
-        internal const int DISM_COMMIT_MASK = unchecked((int)0xffff0000);
+        internal const uint DISM_COMMIT_MASK = unchecked((int)0xffff0000);
 
         #endregion
 

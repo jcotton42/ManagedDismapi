@@ -116,7 +116,7 @@ namespace ManagedDismapi {
     /// Options to use when mounting a Windows image.
     /// </summary>
     [Flags]
-    public enum MountOptions {
+    public enum MountOptions : uint {
         /// <summary>
         /// Mounts the image read/write.
         /// </summary>
@@ -159,10 +159,10 @@ namespace ManagedDismapi {
     }
 
     /// <summary>
-    /// Options to use when unmount a Windows image.
+    /// Options to use when unmounting a Windows image.
     /// </summary>
     [Flags]
-    public enum UnmountOptions {
+    public enum UnmountOptions : uint {
         /// <summary>
         /// Save changes to the image.
         /// </summary>
